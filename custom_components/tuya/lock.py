@@ -19,7 +19,7 @@ from homeassistant.components.lock import (
     LockEntityDescription
 )
 
-LOCKS: dict[str, LockEntityDescription] = {
+LOCKS: dict[str, tuple[LockEntityDescription, ...]] = {
     "jtmsbh": (
         LockEntityDescription(
             key="lock_motor_state",
@@ -40,7 +40,7 @@ async def async_setup_entry(
         entities: list[TuyaLockEntity] = []
         for device_id in device_ids:
             device = hass_data.device_manager.device_map[device_id]
-            if descriptions := LOCKS.get(device.category):
+            if descriptions := [LOCKS.get(device.category)]:
                 for description in descriptions:
                     if description.key in device.status:
                         entities.append(
