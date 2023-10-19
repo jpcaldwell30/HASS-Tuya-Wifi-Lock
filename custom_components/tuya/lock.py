@@ -6,7 +6,6 @@ from typing import Any
 from tuya_iot import TuyaDevice, TuyaDeviceManager
 
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import EntityCategory
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -16,13 +15,11 @@ from .base import TuyaEntity
 from .const import DOMAIN, TUYA_DISCOVERY_NEW, DPCode
 
 from homeassistant.components.lock import (
-    LockDeviceClass,
     LockEntity,
-    LockEntityDescription,
-    LockEntityFeature
+    LockEntityDescription
 )
 
-LOCKS: dict[str, tuple[LockEntityDescription, ...]] = {
+LOCKS: dict[str, LockEntityDescription] = {
     "jtmsbh": (
         LockEntityDescription(
             key="lock_motor_state",
