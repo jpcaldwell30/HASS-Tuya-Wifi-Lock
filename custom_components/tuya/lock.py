@@ -19,7 +19,7 @@ from homeassistant.components.lock import (
     LockEntityDescription
 )
 
-LOCKS: dict[str, LockEntityDescription] = {
+LOCKS: dict[str, tuple[LockEntityDescription, ...]] = {
     "jtmsbh": (
         LockEntityDescription(
             key="lock_motor_state",

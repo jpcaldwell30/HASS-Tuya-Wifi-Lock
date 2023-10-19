@@ -423,7 +423,7 @@ async def async_setup_entry(
 class TuyaLightEntity(TuyaEntity, LightEntity):
     """Tuya light device."""
 
-    entity_description: TuyaLightEntityDescription
+    entity_description: TuyaLightEntityDescription | None = None
 
     _brightness_max: IntegerTypeData | None = None
     _brightness_min: IntegerTypeData | None = None
