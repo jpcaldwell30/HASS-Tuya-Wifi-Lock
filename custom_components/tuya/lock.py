@@ -19,7 +19,7 @@ from homeassistant.components.lock import (
     LockEntityDescription
 )
 
-LOCKS: dict[str, tuple[LockEntityDescription, ...]] = {
+LOCKS: dict[str, LockEntityDescription] = {
     "jtmsbh": (
         LockEntityDescription(
             key="lock_motor_state",
@@ -31,12 +31,12 @@ LOCKS: dict[str, tuple[LockEntityDescription, ...]] = {
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    """Set up tuya sensors dynamically through tuya discovery."""
+    """Set up tuya light dynamically through tuya discovery."""
     hass_data: HomeAssistantTuyaData = hass.data[DOMAIN][entry.entry_id]
 
     @callback
-    def async_discover_device(device_ids: list[str]) -> None:
-        """Discover and add a discovered tuya lock."""
+    def async_discover_device(device_ids: list[str]):
+        """Discover and add a discovered tuya light."""
         entities: list[TuyaLockEntity] = []
         for device_id in device_ids:
             device = hass_data.device_manager.device_map[device_id]
