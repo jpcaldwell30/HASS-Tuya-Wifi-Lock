@@ -3,11 +3,11 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from enum import StrEnum
 import logging
 
 from tuya_iot import TuyaCloudOpenAPIEndpoint
 
-from homeassistant.backports.enum import StrEnum
 from homeassistant.components.sensor import SensorDeviceClass
 from homeassistant.const import (
     CONCENTRATION_MICROGRAMS_PER_CUBIC_METER,
@@ -62,7 +62,6 @@ PLATFORMS = [
     Platform.COVER,
     Platform.FAN,
     Platform.HUMIDIFIER,
-    Platform.LOCK,
     Platform.LIGHT,
     Platform.NUMBER,
     Platform.SCENE,
@@ -145,7 +144,6 @@ class DPCode(StrEnum):
     CLEAN_TIME = "clean_time"
     CLICK_SUSTAIN_TIME = "click_sustain_time"
     CLOUD_RECIPE_NUMBER = "cloud_recipe_number"
-    CLOSED_OPENED = "closed_opened"
     CLOSED_OPENED_KIT = "closed_opened_kit"
     CO_STATE = "co_state"
     CO_STATUS = "co_status"
@@ -237,7 +235,6 @@ class DPCode(StrEnum):
     MOVEMENT_DETECT_PIC = "movement_detect_pic"
     MUFFLING = "muffling"  # Muffling
     NEAR_DETECTION = "near_detection"
-    ONE_OFF = "countdown"
     OPPOSITE = "opposite"
     PAUSE = "pause"
     PERCENT_CONTROL = "percent_control"
@@ -284,7 +281,6 @@ class DPCode(StrEnum):
     SITUATION_SET = "situation_set"
     SLEEP = "sleep"  # Sleep function
     SLOW_FEED = "slow_feed"
-    SMART_WEATHER = "smart_weather"
     SMOKE_SENSOR_STATE = "smoke_sensor_state"
     SMOKE_SENSOR_STATUS = "smoke_sensor_status"
     SMOKE_SENSOR_VALUE = "smoke_sensor_value"
@@ -342,7 +338,6 @@ class DPCode(StrEnum):
     TEMP_VALUE_V2 = "temp_value_v2"
     TEMPER_ALARM = "temper_alarm"  # Tamper alarm
     TIME_TOTAL = "time_total"
-    TIME_USE = "time_use"
     TOTAL_CLEAN_AREA = "total_clean_area"
     TOTAL_CLEAN_COUNT = "total_clean_count"
     TOTAL_CLEAN_TIME = "total_clean_time"
@@ -353,7 +348,6 @@ class DPCode(StrEnum):
     UPPER_TEMP = "upper_temp"
     UPPER_TEMP_F = "upper_temp_f"
     UV = "uv"  # UV sterilization
-    USE_TIME_ONE = "use_time_one"
     VA_BATTERY = "va_battery"
     VA_HUMIDITY = "va_humidity"
     VA_TEMPERATURE = "va_temperature"
@@ -368,7 +362,6 @@ class DPCode(StrEnum):
     WATER_RESET = "water_reset"  # Resetting of water usage days
     WATER_SET = "water_set"  # Water level
     WATERSENSOR_STATE = "watersensor_state"
-    WEATHER_DELAY = "weather_delay"
     WET = "wet"  # Humidification
     WINDOW_CHECK = "window_check"
     WINDOW_STATE = "window_state"
@@ -376,7 +369,6 @@ class DPCode(StrEnum):
     WIRELESS_BATTERYLOCK = "wireless_batterylock"
     WIRELESS_ELECTRICITY = "wireless_electricity"
     WORK_MODE = "work_mode"  # Working mode
-    WORK_STATE = "work_state"    
     WORK_POWER = "work_power"
 
 
