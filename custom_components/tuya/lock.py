@@ -20,12 +20,11 @@ from homeassistant.components.lock import (
 )
 
 LOCKS: dict[str, tuple[LockEntityDescription, ...]] = {
-    "jtmsbh": (
+    "jtmsbh":
         LockEntityDescription(
             key="lock_motor_state",
             icon="mdi:lock",
-        )
-    ),
+        ),
 }
 
 async def async_setup_entry(
