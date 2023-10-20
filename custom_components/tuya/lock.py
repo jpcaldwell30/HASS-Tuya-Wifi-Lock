@@ -4,7 +4,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 import logging
-from typing import Any
 
 from homeassistant.components.lock import LockEntity, LockEntityDescription
 from homeassistant.config_entries import ConfigEntry
@@ -34,7 +33,7 @@ LOCKS: dict[str, TuyaLockEntityDescription] = {
 
 _LOGGER = logging.getLogger(__name__)
 
-
+l
 async def async_setup_entry(
         hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
@@ -78,7 +77,6 @@ class TuyaLockEntity(TuyaEntity, LockEntity):
       # If the status is None, return None
       _LOGGER.debug(self.device.status)
       status = self.device.status.get("lock_motor_state")
-      _LOGGER.debug(status)
       if status is None:
         return None
 

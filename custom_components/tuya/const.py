@@ -225,6 +225,7 @@ class DPCode(StrEnum):
     LIGHT = "light"  # Light
     LIGHT_MODE = "light_mode"
     LOCK = "lock"  # Lock / Child lock
+    LOCK_MOTOR = "lock_motor_state"
     MASTER_MODE = "master_mode"  # alarm mode
     MACH_OPERATE = "mach_operate"
     MANUAL_FEED = "manual_feed"
