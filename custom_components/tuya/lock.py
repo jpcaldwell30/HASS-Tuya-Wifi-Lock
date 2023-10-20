@@ -1,52 +1,54 @@
-"""Support for Tuya wifi lock platform."""
+"""Support for Tuya Locks"""
 from __future__ import annotations
 
+from dataclasses import dataclass
+
+import logging
 from typing import Any
 
-from tuya_iot import TuyaDevice, TuyaDeviceManager
-
+from homeassistant.components.lock import LockEntity, LockEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from tuya_iot import TuyaDevice, TuyaDeviceManager
 
 from . import HomeAssistantTuyaData
 from .base import TuyaEntity
-from .const import DOMAIN, TUYA_DISCOVERY_NEW, DPCode
+from .const import DOMAIN, TUYA_DISCOVERY_NEW
 
-from homeassistant.components.lock import (
-    LockEntity,
-    LockEntityDescription
-)
+@dataclass
+class TuyaLockEntityDescription(LockEntityDescription):
+    open_value: str = "True"
+    closed_value: str = "False"
+    unknown_value: str = "unknown"
 
-LOCKS: dict[str, tuple[LockEntityDescription, ...]] = {
+
+LOCKS: dict[str, TuyaLockEntityDescription] = {
     "jtmsbh":
-        LockEntityDescription(
+        TuyaLockEntityDescription(
             key="lock_motor_state",
             icon="mdi:lock",
         ),
 }
 
+_LOGGER = logging.getLogger(__name__)
+
+
 async def async_setup_entry(
-    hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
+        hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
-    """Set up tuya light dynamically through tuya discovery."""
+    """Set up tuya lock dynamically through tuya discovery."""
     hass_data: HomeAssistantTuyaData = hass.data[DOMAIN][entry.entry_id]
 
     @callback
-    def async_discover_device(device_ids: list[str]):
-        """Discover and add a discovered tuya light."""
+    def async_discover_device(device_ids: list[str]) -> None:
+        """Discover and add a discovered tuya lock."""
         entities: list[TuyaLockEntity] = []
         for device_id in device_ids:
             device = hass_data.device_manager.device_map[device_id]
-            if descriptions := [LOCKS.get(device.category)]:
-                for description in descriptions:
-                    if description.key in device.status:
-                        entities.append(
-                            TuyaLockEntity(
-                                device, hass_data.device_manager, description
-                            )
-                        )
+            if description := LOCKS.get(device.category):
+                entities.append(TuyaLockEntity(device, hass_data.device_manager, description))
 
         async_add_entities(entities)
 
@@ -58,13 +60,13 @@ async def async_setup_entry(
 
 
 class TuyaLockEntity(TuyaEntity, LockEntity):
-    """Tuya Lock Device."""
+    entity_description: TuyaLockEntityDescription | None = None
 
     def __init__(
-        self,
-        device: TuyaDevice,
-        device_manager: TuyaDeviceManager,
-        description: LockEntityDescription,
+            self,
+            device: TuyaDevice,
+            device_manager: TuyaDeviceManager,
+            description: TuyaLockEntityDescription
     ) -> None:
         """Init TuyaHaLock."""
         super().__init__(device, device_manager)
@@ -73,13 +75,20 @@ class TuyaLockEntity(TuyaEntity, LockEntity):
 
     @property
     def is_locked(self) -> bool:
-        """Return true if lock is on."""
-        return self.device.status.get(self.entity_description.key, False)
+      # If the status is None, return None
+      _LOGGER.debug(self.device.status)
+      status = self.device.status.get("lock_motor_state")
+      _LOGGER.debug(status)
+      if status is None:
+        return None
+
+      # Return True if the status is True, False otherwise.
+      return not status
 
     def lock(self, **kwargs):
         """Lock the lock."""
-        self._send_command([{"code": self.entity_description.key, "value": True}]) #tuya  method
+        self._send_command([{"code": self.entity_description.key, "value": False}])
 
     def unlock(self, **kwargs):
         """Unlock the lock."""
-        self._send_command([{"code": self.entity_description.key, "value": False}]) #tuya  method
+        self._send_command([{"code": self.entity_description.key, "value": True}])
