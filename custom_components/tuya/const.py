@@ -225,7 +225,8 @@ class DPCode(StrEnum):
     LIGHT = "light"  # Light
     LIGHT_MODE = "light_mode"
     LOCK = "lock"  # Lock / Child lock
-    LOCK_MOTOR = "lock_motor_state"
+    M15_WIFI_01_LOCK_STATE = "lock_motor_state"
+    M15_WIFI_01_BATTERY_PERCENTAGE = "residual_electricity"
     MASTER_MODE = "master_mode"  # alarm mode
     MACH_OPERATE = "mach_operate"
     MANUAL_FEED = "manual_feed"

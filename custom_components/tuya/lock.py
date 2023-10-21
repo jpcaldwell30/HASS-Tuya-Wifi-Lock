@@ -14,13 +14,12 @@ from tuya_iot import TuyaDevice, TuyaDeviceManager
 
 from . import HomeAssistantTuyaData
 from .base import TuyaEntity
-from .const import DOMAIN, TUYA_DISCOVERY_NEW
+from .const import DOMAIN, TUYA_DISCOVERY_NEW, DPCode, DPType
 
 @dataclass
 class TuyaLockEntityDescription(LockEntityDescription):
     open_value: str = "True"
     closed_value: str = "False"
-    unknown_value: str = "unknown"
 
 
 LOCKS: dict[str, TuyaLockEntityDescription] = {
@@ -33,7 +32,6 @@ LOCKS: dict[str, TuyaLockEntityDescription] = {
 
 _LOGGER = logging.getLogger(__name__)
 
-l
 async def async_setup_entry(
         hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
@@ -57,36 +55,50 @@ async def async_setup_entry(
         async_dispatcher_connect(hass, TUYA_DISCOVERY_NEW, async_discover_device)
     )
 
-
 class TuyaLockEntity(TuyaEntity, LockEntity):
-    entity_description: TuyaLockEntityDescription | None = None
+  """Tuya Lock Device."""
 
-    def __init__(
-            self,
-            device: TuyaDevice,
-            device_manager: TuyaDeviceManager,
-            description: TuyaLockEntityDescription
-    ) -> None:
-        """Init TuyaHaLock."""
-        super().__init__(device, device_manager)
-        self.entity_description = description
-        self._attr_unique_id = f"{super().unique_id}{description.key}"
+  _closed_opened_dpcode: DPCode | None = None
+  entity_description: TuyaLockEntityDescription | None = None
+  battery_level: int | None = None
 
-    @property
-    def is_locked(self) -> bool:
-      # If the status is None, return None
-      _LOGGER.debug(self.device.status)
-      status = self.device.status.get("lock_motor_state")
-      if status is None:
-        return None
+  def __init__(
+      self,
+      device: TuyaDevice,
+      device_manager: TuyaDeviceManager,
+      description: TuyaLockEntityDescription
+  ) -> None:
+    """Init TuyaHaLock."""
+    super().__init__(device, device_manager)
 
-      # Return True if the status is True, False otherwise.
-      return not status
+    self.entity_description = description
 
-    def lock(self, **kwargs):
-        """Lock the lock."""
-        self._send_command([{"code": self.entity_description.key, "value": False}])
+    # Find the DPCode for the lock state.
+    if enum_type := self.find_dpcode(DPCode.M15_WIFI_01_LOCK_STATE, dptype=DPType.ENUM):
+      self._closed_opened_dpcode = enum_type.dpcode
 
-    def unlock(self, **kwargs):
-        """Unlock the lock."""
-        self._send_command([{"code": self.entity_description.key, "value": True}])
+  @property
+  def is_locked(self) -> bool | None:
+    """Return true if the lock is locked."""
+    # Get the status of the lock.
+    status = self.device.status.get(self._closed_opened_dpcode)
+
+    # If the status is None, return None.
+    if status is None:
+      return None
+
+    # Return True if the status is equal to the closed_value property of the entity_description object, False otherwise.
+    return status == self.entity_description.closed_value
+
+  @property
+  def battery_level(self) -> int | None:
+    """Return the battery level."""
+    # Get the battery level from the device status.
+    battery_level = self.device.status.get(DPCode.BATTERY_PERCENTAGE)
+
+    # If the battery level is None, return None.
+    if battery_level is None:
+      return None
+
+    # Return the battery level as an integer.
+    return int(battery_level)
