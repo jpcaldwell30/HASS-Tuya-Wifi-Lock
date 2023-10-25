@@ -887,6 +887,17 @@ SENSORS: dict[str, tuple[TuyaSensorEntityDescription, ...]] = {
             icon="mdi:progress-clock",
         ),
     ),
+    "jtmsbh": (
+        TuyaSensorEntityDescription(
+            key=DPCode.M15_WIFI_01_BATTERY_PERCENTAGE,
+            translation_key="lock_battery",
+            device_class=SensorDeviceClass.BATTERY,
+            native_unit_of_measurement=PERCENTAGE,
+            state_class=SensorStateClass.MEASUREMENT,
+             entity_category=EntityCategory.DIAGNOSTIC,
+            icon="mdi:battery-lock",
+        ),
+    ),
     # Humidifier
     # https://developer.tuya.com/en/docs/iot/s?id=K9gf48qwjz0i3
     "jsq": (
