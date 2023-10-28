@@ -61,16 +61,17 @@ class TuyaLockEntity(TuyaEntity, LockEntity):
   """Tuya Lock Device."""
   _closed_opened_dpcode: DPCode | None = None
   entity_description: TuyaLockEntityDescription | None = None
-  battery_level: int | None = None
 
   def __init__(
       self,
       device: TuyaDevice,
       device_manager: TuyaDeviceManager,
-      description: TuyaLockEntityDescription
+      description: TuyaLockEntityDescription,
   ) -> None:
     """Init TuyaHaLock."""
     super().__init__(device, device_manager)
+    self.ticket_url = "/v1.0/smart-lock/devices/" + self.device.id + "/password-ticket"
+    self.operate_url = "/v1.0/smart-lock/devices/"+ self.device.id + "/password-free/door-operate"
     self.entity_description = description
 
     # Find the DPCode for the lock state.
@@ -90,11 +91,23 @@ class TuyaLockEntity(TuyaEntity, LockEntity):
 
     # Return True if the status is equal to the closed_value property of the entity_description object, False otherwise.
     return status == self.entity_description.closed_value
-
+  
   def lock(self, **kwargs):
     """Lock the lock."""
-    self._send_command([{"code": self.entity_description.key, "value": self.entity_description.closed_value}])
+    ticket_response = self.device_manager.api.post(self.ticket_url)
+    ticket_id = ticket_response["result"].get("ticket_id")
+    body = {
+    "ticket_id":ticket_id,
+    "open":False
+    }
+    self.device_manager.api.post(self.operate_url, body)
 
   def unlock(self, **kwargs):
     """Unlock the lock."""
-    self._send_command([{"code": self.entity_description.key, "value": self.entity_description.open_value}])
+    ticket_response = self.device_manager.api.post(self.ticket_url)
+    ticket_id = ticket_response["result"].get("ticket_id")
+    body = {
+    "ticket_id":ticket_id,
+    "open":True
+    }
+    self.device_manager.api.post(self.operate_url, body)
