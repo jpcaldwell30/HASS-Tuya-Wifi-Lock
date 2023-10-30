@@ -29,7 +29,6 @@ from homeassistant.helpers.typing import StateType
 from . import HomeAssistantTuyaData
 from .base import ElectricityTypeData, EnumTypeData, IntegerTypeData, TuyaEntity
 from .const import (
-    BATTERY_PERCENTAGE,
     DEVICE_CLASS_UNITS,
     DOMAIN,
     TUYA_DISCOVERY_NEW,
@@ -891,13 +890,12 @@ SENSORS: dict[str, tuple[TuyaSensorEntityDescription, ...]] = {
     "jtmsbh": (
         TuyaSensorEntityDescription(
             key=DPCode.M15_WIFI_01_BATTERY_PERCENTAGE,
-            translation_key="battery_percentage",
-            native_unit_of_measurement=BATTERY_PERCENTAGE,
+            translation_key="battery",
             device_class=SensorDeviceClass.BATTERY,
+            native_unit_of_measurement=PERCENTAGE,
             state_class=SensorStateClass.MEASUREMENT,
             entity_category=EntityCategory.DIAGNOSTIC,
             icon="mdi:battery-lock",
-            subkey="POWER",
         ),
     ),
     # Humidifier
