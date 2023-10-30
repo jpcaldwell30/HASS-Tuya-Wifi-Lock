@@ -1200,31 +1200,13 @@ class TuyaSensorEntity(TuyaEntity, SensorEntity):
         value = self.device.status.get(self.entity_description.key)
         if value is None:
             return None
-        
-        import logging
-        _LOGGER = logging.getLogger(__name__)
-        _LOGGER.debug("asset id is %s", self.device.asset_id)
-        _LOGGER.debug("id is %s", self.device.id)
-        _LOGGER.debug("product id is %s", self.device.product_id)
-        _LOGGER.debug("product name is %s", self.device.product_name)
-        _LOGGER.debug("value is %s", value)
-        
-        self._type_data.dpcode == DPCode.M15_WIFI_01_BATTERY_PERCENTAGE
-        if self.device.asset_id == "jtmsbh":
-            return value
 
         # Scale integer/float value
         if isinstance(self._type_data, IntegerTypeData):
-            IntegerTypeData.scale_value(93)
-            _LOGGER.debug("my device was detected as %s", self._type_data)
-            scaled_value = self._type_data.scale_value(value)
-            _LOGGER.debug("scaled value is %s", scaled_value)
-            _LOGGER.debug("value is %s", value)
-            _LOGGER.debug("_uom is %s", self._uom)
-            _LOGGER.debug("conversion function is is %s", self._uom.conversion_fn)
             if self._uom and self._uom.conversion_fn is not None:
+                scaled_value = self._type_data.scale_value(value)
                 return self._uom.conversion_fn(scaled_value)
-            return scaled_value
+            return value
 
         # Unexpected enum value
         if (
