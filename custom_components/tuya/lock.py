@@ -25,6 +25,11 @@ class TuyaLockEntityDescription(LockEntityDescription):
     closed_value: bool = False
 
 LOCKS: dict[str, TuyaLockEntityDescription] = {
+    # "<lock catagory>":
+    #     TuyaLockEntityDescription(
+    #         key=<DPcode.YOUR_LOCKS_DP_CODE_YOU_DEFINED_FOR_THE_LOCK_STATE_IN_CONST.PY>,
+    #         icon="mdi:lock",
+    #     ),
     "jtmsbh":
         TuyaLockEntityDescription(
             key=DPCode.M15_WIFI_01_LOCK_STATE,

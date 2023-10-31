@@ -82,6 +82,18 @@ BATTERY_SENSORS: tuple[TuyaSensorEntityDescription, ...] = (
 # end up being a sensor.
 # https://developer.tuya.com/en/docs/iot/standarddescription?id=K9i5ql6waswzq
 SENSORS: dict[str, tuple[TuyaSensorEntityDescription, ...]] = {
+    # Define your lock battery's sensor here...
+    # "<lock catagory>": (
+    #     TuyaSensorEntityDescription(
+    #         key=<DPcode.YOUR_LOCKS_DP_CODE_YOU_DEFINED_FOR_THE_LOCK_BATTERY_STATE_IN_CONST.PY>,
+    #         translation_key="battery",
+    #         device_class=SensorDeviceClass.BATTERY,
+    #         native_unit_of_measurement=PERCENTAGE,
+    #         state_class=SensorStateClass.MEASUREMENT,
+    #         entity_category=EntityCategory.DIAGNOSTIC,
+    #         icon="mdi:battery-lock",
+    #     ),
+    # ),    
     # Multi-functional Sensor
     # https://developer.tuya.com/en/docs/iot/categorydgnbj?id=Kaiuz3yorvzg3
     "dgnbj": (
