@@ -21,8 +21,11 @@ from .const import DOMAIN, TUYA_DISCOVERY_NEW, DPCode
 
 @dataclass
 class TuyaLockEntityDescription(LockEntityDescription):
-    open_value: bool = True
-    closed_value: bool = False
+    unlocked_value: bool = True
+    locked_value: bool = False
+
+# standard is defined as Send: 1 byte. true: unlocks the door. false: locks the door.
+#                        Report: 1 byte. true: indicates the unlocked status. false: indicates the locked status.
 
 LOCKS: dict[str, TuyaLockEntityDescription] = {
     # "<lock catagory>":
@@ -94,8 +97,8 @@ class TuyaLockEntity(TuyaEntity, LockEntity):
     if status is None:
       return None
 
-    # Return True if the status is equal to the closed_value property of the entity_description object, False otherwise.
-    return status == self.entity_description.closed_value
+    # Return True if the status is equal to the locked_value property of the entity_description object, False otherwise.
+    return status == self.entity_description.locked_value
   
   def lock(self, **kwargs):
     """Lock the lock."""
