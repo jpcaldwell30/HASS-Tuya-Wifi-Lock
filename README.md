@@ -22,6 +22,8 @@ Once you have your lock's DPCodes, open the const.py file from this repo. Add tw
 M15_WIFI_01_LOCK_STATE = "lock_motor_state"
 M15_WIFI_01_BATTERY_PERCENTAGE = "residual_electricity"
 
+Also make sure to add the lock platform anywhere within the Platforms dict: <Platform.LOCK,>
+
 Next, open lock.py file from this repo. Uncomment out the example entry (starting at line 28) and fill in with the info for your locks catagory, and the DPcode you defined for the lock status previosly.
 If your lock uses a non standard DPCode for determining it's status (standard is true: unlocked door, false: locked door), then you can update your expected value for the locks locked/unlocked states on line 24 and 25
 
