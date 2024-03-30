@@ -19,9 +19,8 @@ First, follow the instructions found here to locate the neceary DPCodes that ref
 
 Once you have your lock's DPCodes, open the const.py file from this repo. Add two easily rememberable DPCode entries in the form NAME="<DPcode>". One for the lock state DPCode and one for the lock battery DPCode. for example, I set mine as:
 
-M15_WIFI_01_LOCK_STATE = "lock_motor_state"
-
-M15_WIFI_01_BATTERY_PERCENTAGE = "residual_electricity"
+'M15_WIFI_01_LOCK_STATE = "lock_motor_state"
+M15_WIFI_01_BATTERY_PERCENTAGE = "residual_electricity"'
 
 Also make sure to add the lock platform anywhere within the Platforms dict: <Platform.LOCK,>
 
@@ -31,8 +30,8 @@ If your lock uses a non standard DPCode for determining it's status (standard is
 Finally, open the sensor.py. Uncomment out the example entry (starting at line 85) and fill in with the info for your locks catagory, and the DPcode you defined for the lock BATTERY status previosly.
 Depending on how the battery of your lock is displayed, you may need to also edit the native_value function to properly reflect the actual value of your battery. For example, my lock would by default display the battery percentage as x.x% when it should have been xx%. I had to add the following lines to the native_value function so that my locks battery percentage was displayed as expected.      
 
-Return raw value for specific data point codes (e.g., M15_WIFI_01_BATTERY_PERCENTAGE)
+'Return raw value for specific data point codes (e.g., M15_WIFI_01_BATTERY_PERCENTAGE)
         if self.entity_description.key == DPCode.M15_WIFI_01_BATTERY_PERCENTAGE:
-            return value 
+            return value'
 
 Save these changes and reboot home assitant. Your lock should show up automatically. 
