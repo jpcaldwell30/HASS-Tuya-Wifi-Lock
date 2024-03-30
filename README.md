@@ -19,8 +19,8 @@ First, follow the instructions found here to locate the neceary DPCodes that ref
 
 Once you have your lock's DPCodes, open the const.py file from this repo. Add two easily rememberable DPCode entries in the form NAME="<DPcode>". One for the lock state DPCode and one for the lock battery DPCode. for example, I set mine as:
 
-'M15_WIFI_01_LOCK_STATE = "lock_motor_state"
-M15_WIFI_01_BATTERY_PERCENTAGE = "residual_electricity"'
+>M15_WIFI_01_LOCK_STATE = "lock_motor_state"
+M15_WIFI_01_BATTERY_PERCENTAGE = "residual_electricity"
 
 Also make sure to add the lock platform anywhere within the Platforms dict: <Platform.LOCK,>
 
